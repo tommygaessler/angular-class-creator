@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="class-creator">
+  <head>
+    <meta charset="utf-8">
+    <title>Angular Class Creator</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  </head>
+  <body ng-controller="createClassController as createClassCtrl">
+    <!-- <div class="container"> -->
+      <div class="row">
+        <div class="col s4">
+          <div ng-repeat="classes in createClassCtrl.school.classes" class="card">
+            <div class="card-content">
+              <p>Class Name: {{ classes.class_name }}</p>
+              <p>Teacher Name: {{ classes.teacher_name }}</p>
+              <p>Student Count: {{ classes.student_in_class_count }}</p>
+              <ul>
+                <li ng-repeat="student in classes.students">{{ student.student_name }} {{ student.student_grade }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col s4">
+          <h3>Create a New Class</h3>
+          <form ng-submit="createClassCtrl.createClass()" name="form">
+            <div class="input-field col s6">
+              <input id="class_name" type="text" class="validate" ng-model="createClassCtrl.class_name" name="class_name">
+              <label for="class_name">Class Name</label>
+            </div>
+            <div class="input-field col s6">
+              <input id="teacher_name" type="text" class="validate" ng-model="createClassCtrl.teacher_name" name="teacher_name">
+              <label for="teacher_name">Teacher Name</label>
+            </div>
+            <button type="submit" class="waves-effect waves-light btn">Create</button>
+          </form>
+          <h3>Create a New Student</h3>
+          <form ng-submit="createClassCtrl.createStudent(form)" name="form">
+            <div class="input-field col s6">
+              <input id="student_name" type="text" class="validate" ng-model="createClassCtrl.student_name" name="student_name">
+              <label for="student_name">Student Name</label>
+            </div>
+            <div class="col s6">
+              <select style="display: block" ng-model="createClassCtrl.class_index" name="class_index">
+                <option value="" disabled selected>Choose a Class</option>
+                <option value="{{ $index }}" ng-repeat="class in createClassCtrl.school.classes track by $index">{{ class.class_name }}</option>
+              </select>
+              <label>Materialize Select</label>
+            </div>
+            <button type="submit" class="waves-effect waves-light btn">Create</button>
+          </form>
+        </div>
+        <div class="col s4">
+          <div class="card">
+            <div class="card-content">
+              <p>Total Classes: {{ createClassCtrl.school.class_count }}</p>
+              <p>Total Students:</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{createClassCtrl.school}}
+    <!-- </div> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.10/angular.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers.js"></script>
+  </body>
+</html>
