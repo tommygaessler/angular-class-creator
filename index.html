@@ -9,20 +9,22 @@
   <body ng-controller="createClassController as createClassCtrl">
     <!-- <div class="container"> -->
       <div class="row">
+        <h3>Class Creator</h3>
+        <hr>
         <div class="col s4">
-          <div ng-repeat="classes in createClassCtrl.school.classes" class="card">
+          <div ng-repeat="classes in createClassCtrl.school.classes track by $index" class="card">
             <div class="card-content">
               <p>Class Name: {{ classes.class_name }}</p>
               <p>Teacher Name: {{ classes.teacher_name }}</p>
               <p>Student Count: {{ classes.student_in_class_count }}</p>
-              <ul>
-                <li ng-repeat="student in classes.students">{{ student.student_name }} {{ student.student_grade }}</li>
+              <ul class="browser-default">
+                <li ng-repeat="student in classes.students track by $index">{{ student.student_name }} {{ student.student_grade | grades }} <span class="right" ng-click="createClassCtrl.lowerGrade($parent.$index, $index)">-</span><span class="right" ng-click="createClassCtrl.raiseGrade($parent.$index, $index)">+</span></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="col s4">
-          <h3>Create a New Class</h3>
+          <h5>Create a New Class</h5>
           <form ng-submit="createClassCtrl.createClass()" name="form">
             <div class="input-field col s6">
               <input id="class_name" type="text" class="validate" ng-model="createClassCtrl.class_name" name="class_name">
@@ -34,18 +36,17 @@
             </div>
             <button type="submit" class="waves-effect waves-light btn">Create</button>
           </form>
-          <h3>Create a New Student</h3>
-          <form ng-submit="createClassCtrl.createStudent(form)" name="form">
+          <h5>Create a New Student</h5>
+          <form ng-submit="createClassCtrl.createStudent()" name="form">
             <div class="input-field col s6">
               <input id="student_name" type="text" class="validate" ng-model="createClassCtrl.student_name" name="student_name">
               <label for="student_name">Student Name</label>
             </div>
-            <div class="col s6">
-              <select style="display: block" ng-model="createClassCtrl.class_index" name="class_index">
+            <div class="input-field col s6">
+              <select class="browser-default" ng-model="createClassCtrl.class_index" name="class_index">
                 <option value="" disabled selected>Choose a Class</option>
                 <option value="{{ $index }}" ng-repeat="class in createClassCtrl.school.classes track by $index">{{ class.class_name }}</option>
               </select>
-              <label>Materialize Select</label>
             </div>
             <button type="submit" class="waves-effect waves-light btn">Create</button>
           </form>
@@ -54,12 +55,20 @@
           <div class="card">
             <div class="card-content">
               <p>Total Classes: {{ createClassCtrl.school.class_count }}</p>
-              <p>Total Students:</p>
+              <p>Total Students: {{ createClassCtrl.school.student_count }}</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <h5>Stats for:</h5>
+              <select class="browser-default input-field" ng-model="createClassCtrl.average_grade_index" name="average_grade_index" ng-change="createClassCtrl.calculate_average_grade()">
+                <option value="{{ $index }}" ng-repeat="class in createClassCtrl.school.classes track by $index">{{ class.class_name }}</option>
+              </select>
+              <p>Class Average: {{ createClassCtrl.class_average | grades }}</p>
             </div>
           </div>
         </div>
       </div>
-      {{createClassCtrl.school}}
     <!-- </div> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.10/angular.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
